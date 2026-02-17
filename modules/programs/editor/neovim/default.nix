@@ -18,6 +18,9 @@ in
   home-manager.sharedModules = [
     (_: {
       programs.neovim.enable = true;
+      programs.neovim.plugins = [
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+      ];
       xdg.configFile."nvim".source = inputs.neovim;
       xdg.desktopEntries = {
         "nvim" = {
