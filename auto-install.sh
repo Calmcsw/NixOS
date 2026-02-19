@@ -30,10 +30,10 @@ RESET="$(tput sgr0)"
 set -e
 
 # Common installer functions
-if [ -f "scripts/lib/install-common.sh" ]; then
-    # shellcheck source=/dev/null
-    . "scripts/lib/install-common.sh"
-fi
+#if [ -f "scripts/lib/install-common.sh" ]; then
+#    # shellcheck source=/dev/null
+#    . "scripts/lib/install-common.sh"
+#fi
 
 if [ -n "$(grep -i nixos </etc/os-release)" ]; then
     echo "${OK} Verified this is NixOS."
@@ -70,28 +70,30 @@ cd || exit
 echo "-----"
 
 backupname=$(date "+%Y-%m-%d-%H-%M-%S")
-if [ -d "NixOS-Hyprland" ]; then
-    echo "$NOTE NixOS-Hyprland exists, backing up to NixOS-Hyprland-backups directory."
-    if [ -d "NixOS-Hyprland-backups" ]; then
-        echo "Moving current version of NixOS-Hyprland to backups directory."
-        sudo mv "$HOME"/NixOS-Hyprland NixOS-Hyprland-backups/"$backupname"
+if [ -d "NixOS" ]; then
+    echo "$NOTE NixOS exists, backing up to NixOS-backups directory."
+    if [ -d "NixOS-backups" ]; then
+        echo "Moving current version of NixOS to backups directory."
+        sudo mv "$HOME"/NixOS NixOS-backups/"$backupname"
         sleep 1
     else
-        echo "$NOTE Creating the backups directory & moving NixOS-Hyprland to it."
-        mkdir -p NixOS-Hyprland-backups
-        sudo mv "$HOME"/NixOS-Hyprland NixOS-Hyprland-backups/"$backupname"
+        echo "$NOTE Creating the backups directory & moving NixOS to it."
+        mkdir -p NixOS-backups
+        sudo mv "$HOME"/NixOS NixOS-backups/"$backupname"
         sleep 1
     fi
 else
-    echo "$OK Thank you for choosing KooL's NixOS-Hyprland"
+    echo "$OK Thank you for choosing NixOS"
 fi
 
 echo "-----"
 
-echo "$NOTE Cloning & Entering NixOS-Hyprland Repository"
-git clone --depth 1 https://github.com/LinuxBeginnings/NixOS-Hyprland.git ~/NixOS-Hyprland
-cd ~/NixOS-Hyprland || exit
+echo "$NOTE Cloning & Entering NixOS Repository"
+git clone --depth 1 https://github.com/Calmcsw/NixOS.git ~/NixOS
+cd ~/NixOS || exit
 
 printf "\n%.0s" {1..2}
 
 echo "-----"
+
+sudo ./install.sh
