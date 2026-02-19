@@ -96,4 +96,4 @@ printf "\n%.0s" {1..2}
 
 echo "-----"
 
-sudo -u ./install.sh
+sudo -u $USER ./install.sh
