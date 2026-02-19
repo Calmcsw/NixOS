@@ -74,12 +74,12 @@ if [ -d "NixOS" ]; then
     echo "$NOTE NixOS exists, backing up to NixOS-backups directory."
     if [ -d "NixOS-backups" ]; then
         echo "Moving current version of NixOS to backups directory."
-        sudo mv "$HOME"/NixOS NixOS-backups/"$backupname"
+        mv "$HOME"/NixOS NixOS-backups/"$backupname"
         sleep 1
     else
         echo "$NOTE Creating the backups directory & moving NixOS to it."
         mkdir -p NixOS-backups
-        sudo mv "$HOME"/NixOS NixOS-backups/"$backupname"
+        mv "$HOME"/NixOS NixOS-backups/"$backupname"
         sleep 1
     fi
 else
@@ -96,4 +96,4 @@ printf "\n%.0s" {1..2}
 
 echo "-----"
 
-sudo -u $USER ./install.sh
+sh ./install.sh
