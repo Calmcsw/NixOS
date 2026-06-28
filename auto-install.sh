@@ -7,7 +7,7 @@ printf "\n%.0s" {1..2}
 echo -e "\e[35m
 	╦╔═┌─┐┌─┐╦    ╦ ╦┬ ┬┌─┐┬─┐┬  ┌─┐┌┐┌┌┬┐
 	╠╩╗│ ││ │║    ╠═╣└┬┘├─┘├┬┘│  ├─┤│││ ││ 2025
-	╩ ╩└─┘└─┘╩═╝  ╩ ╩ ┴ ┴  ┴└─┴─┘┴ ┴┘└┘─┴┘ 
+	╩ ╩└─┘└─┘╩═╝  ╩ ╩ ┴ ┴  ┴└─┴─┘┴ ┴┘└┘─┴┘
 \e[0m"
 printf "\n%.0s" {1..1}
 
@@ -89,7 +89,7 @@ fi
 echo "-----"
 
 echo "$NOTE Cloning & Entering NixOS Repository"
-git clone --depth 1 https://github.com/Calmcsw/NixOS.git ~/NixOS
+git clone --depth 1 https://codeberg.org/Calmcs/NixOS.git ~/NixOS
 cd ~/NixOS || exit
 
 printf "\n%.0s" {1..2}

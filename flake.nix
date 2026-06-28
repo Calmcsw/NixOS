@@ -34,6 +34,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    hyprland = {
+        url = "github:hyprwm/Hyprland";
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,6 +62,13 @@
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-software-center = {
+      url = "github:snowfallorg/nix-software-center";
+    };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -74,12 +85,12 @@
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
       mkHost =
-        host:
+        { os, arch, host }:
         nixpkgs.lib.nixosSystem {
           # inherit system;
           system = forAllSystems (system: system);
           modules = [
-            ./hosts/${host}/configuration.nix
+            ./hosts/${os}/${arch}/${host}/configuration.nix
           ];
           specialArgs = {
             overlays = import ./overlays { inherit inputs host; };
@@ -88,7 +99,29 @@
               inputs
               outputs
               host
+              os
+              arch
               ;
+          };
+        };
+      mkWslHost =
+        { arch, host }:
+        nixpkgs.lib.nixosSystem {
+          system = forAllSystems (system: system);
+          modules = [
+            inputs.nixos-wsl.nixosModules.default
+            ./hosts/wsl/${arch}/${host}/configuration.nix
+          ];
+          specialArgs = {
+            overlays = import ./overlays { inherit inputs host; };
+            inherit
+              self
+              inputs
+              outputs
+              host
+              arch
+              ;
+            os = "wsl";
           };
         };
     in
@@ -96,8 +129,9 @@
       templates = import ./dev-shells;
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
       nixosConfigurations = {
-        Default = mkHost "Default";
-        Gecko = mkHost "Gecko";
+        Default  = mkHost { os = "linux"; arch = "x86-64"; host = "Default";  };
+        Lockdown = mkHost { os = "linux"; arch = "x86-64"; host = "Lockdown"; };
+        Gecko    = mkHost { os = "linux"; arch = "x86-64"; host = "Gecko";    };
       };
     };
 }

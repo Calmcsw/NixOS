@@ -61,15 +61,15 @@ choose_drivers() {
     read -p "Enter choice (1, 2 or 3): " driver_choice
     case $driver_choice in
     1)
-      sed -i -e "s/videoDriver = .*;/videoDriver = \"nvidia\";/" "./hosts/$host/variables.nix"
+      sed -i -e "s/videoDriver = .*;/videoDriver = \"nvidia\";/" "./hosts/linux/x86-64/$host/variables.nix"
       break
       ;;
     2)
-      sed -i -e "s/videoDriver = .*;/videoDriver = \"amdgpu\";/" "./hosts/$host/variables.nix"
+      sed -i -e "s/videoDriver = .*;/videoDriver = \"amdgpu\";/" "./hosts/linux/x86-64/$host/variables.nix"
       break
       ;;
     3)
-      sed -i -e "s/videoDriver = .*;/videoDriver = \"intel\";/" "./hosts/$host/variables.nix"
+      sed -i -e "s/videoDriver = .*;/videoDriver = \"intel\";/" "./hosts/linux/x86-64/$host/variables.nix"
       break
       ;;
     *) error "Invalid choice. Enter 1, 2, or 3." ;;
@@ -83,7 +83,7 @@ open_variables() {
   # Find available editor and open
   for editor in "${EDITOR}" nano vim vi; do
     if command -v "$editor" &>/dev/null; then
-      $editor "./hosts/$selected_host/variables.nix"
+      $editor "./hosts/linux/x86-64/$selected_host/variables.nix"
       break
     fi
   done
@@ -91,7 +91,7 @@ open_variables() {
 
 list_hosts() {
   local hosts=()
-  for host_dir in ./hosts/*/; do
+  for host_dir in ./hosts/linux/x86-64/*/; do
     if [ -d "$host_dir" ]; then
       host_name=$(basename "$host_dir")
       hosts+=("$host_name")
@@ -109,28 +109,28 @@ create_new_host() {
     return 1
   fi
 
-  if [ -d "./hosts/$new_name" ]; then
+  if [ -d "./hosts/linux/x86-64/$new_name" ]; then
     error "Host '$new_name' already exists"
     return 1
   fi
 
-  if [ ! -d "./hosts/$template" ]; then
+  if [ ! -d "./hosts/linux/x86-64/$template" ]; then
     error "Template host '$template' does not exist"
     return 1
   fi
 
   info "Creating new host '$new_name' from template '$template'..."
-  cp -r "./hosts/$template" "./hosts/$new_name" || {
+  cp -r "./hosts/linux/x86-64/$template" "./hosts/linux/x86-64/$new_name" || {
     error "Failed to copy template"
     return 1
   }
 
   # Remove old hardware config
-  rm -f "./hosts/$selected_host/hardware-configuration.nix"
+  rm -f "./hosts/linux/x86-64/$selected_host/hardware-configuration.nix"
 
   # Update hostname in the new host's variables.nix if it exists
-  if [ -f "./hosts/$new_name/variables.nix" ]; then
-    sed -i -e "s/hostname = .*;/hostname = \"$new_name\";/" "./hosts/$new_name/variables.nix"
+  if [ -f "./hosts/linux/x86-64/$new_name/variables.nix" ]; then
+    sed -i -e "s/hostname = .*;/hostname = \"$new_name\";/" "./hosts/linux/x86-64/$new_name/variables.nix"
   fi
 
   echo "Host '$new_name' created successfully."
@@ -155,7 +155,7 @@ add_host_to_flake() {
       print
       getline
       print
-      print "        " host " = mkHost \"" host "\";"
+      print "        " host " = mkHost { os = \"linux\"; arch = \"x86-64\"; host = \"" host "\"; };"
       next
     }
     { print }
@@ -230,7 +230,7 @@ info "Using host: $selected_host"
 choose_drivers $selected_host
 
 # Replace username variable in variables.nix with $USER
-sed -i -e "s/username = .*;/username = \"$currentUser\";/" "./hosts/$selected_host/variables.nix"
+sed -i -e "s/username = .*;/username = \"$currentUser\";/" "./hosts/linux/x86-64/$selected_host/variables.nix"
 
 # Ask if user wants to edit variables.nix
 read -p "Edit variables.nix for host: $selected_host? (Y/n): " edit_vars
@@ -241,9 +241,9 @@ fi
 # Generate Hardware Configuration
 info "Generating hardware configuration..."
 if [ -f "/etc/nixos/hardware-configuration.nix" ]; then
-  sudo cp "/etc/nixos/hardware-configuration.nix" "./hosts/$selected_host/hardware-configuration.nix"
+  sudo cp "/etc/nixos/hardware-configuration.nix" "./hosts/linux/x86-64/$selected_host/hardware-configuration.nix"
 else
-  sudo nixos-generate-config --show-hardware-config | sudo tee "./hosts/$selected_host/hardware-configuration.nix" >/dev/null
+  sudo nixos-generate-config --show-hardware-config | sudo tee "./hosts/linux/x86-64/$selected_host/hardware-configuration.nix" >/dev/null
 fi
 
 sudo git -C . add "hosts/$selected_host/*" 2>/dev/null || true
