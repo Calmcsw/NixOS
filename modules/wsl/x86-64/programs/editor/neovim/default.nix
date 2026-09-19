@@ -5,6 +5,7 @@
   ...
 }:
 let
+  pkgs-stable = inputs.nixpkgs-stable.legacyPackages.${pkgs.system};
   terminals = (import ../../../../../../hosts/wsl/x86-64/${host}/variables.nix).terminals;
   terminal = builtins.head (pkgs.lib.splitString "," terminals);
 in
@@ -22,6 +23,7 @@ in
   home-manager.sharedModules = [
     (_: {
       programs.neovim.enable = true;
+      programs.neovim.package = pkgs-stable.neovim-unwrapped;
       programs.neovim.plugins = [
         pkgs.vimPlugins.nvim-treesitter.withAllGrammars
       ];

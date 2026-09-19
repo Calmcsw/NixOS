@@ -10,6 +10,17 @@ in
     networkmanager = {
       enable = true;
       unmanaged = [ "type:wifi" ];
+      dispatcherScripts = [{
+        source = pkgs.writeText "wol" ''
+          #!/bin/sh
+          INTERFACE="$1"
+          ACTION="$2"
+          case "$INTERFACE" in en*)
+            [ "$ACTION" = "up" ] && ${pkgs.ethtool}/sbin/ethtool -s "$INTERFACE" wol g
+          esac
+        '';
+        type = "basic";
+      }];
     };
 
     wireless = {
@@ -21,8 +32,8 @@ in
     };
 
     firewall = {
-      enable = true;
-      allowedTCPPorts = [ ];
+      enable = false;
+      allowedTCPPorts = [ ]; # deskflow
       allowedUDPPorts = [ ];
     };
   };
@@ -102,5 +113,5 @@ in
     SUBSYSTEM=="rfkill", ATTR{type}=="wlan", ACTION=="change", ATTR{soft}="0"
   '';
 
-  environment.systemPackages = with pkgs; [ networkmanagerapplet iwgtk ];
+  environment.systemPackages = with pkgs; [ networkmanagerapplet iwgtk ethtool ];
 }

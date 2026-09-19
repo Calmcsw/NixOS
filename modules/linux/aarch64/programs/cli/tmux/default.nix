@@ -39,7 +39,17 @@ let
 in
 {
   home-manager.sharedModules = [
-    (_: {
+    ({ lib, config, ... }: {
+      home.activation.tmuxDocuments = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        mkdir -p "${config.home.homeDirectory}/documents/tmux"
+
+        if [ ! -L "${config.home.homeDirectory}/.tmux" ]; then
+          rm -rf "${config.home.homeDirectory}/.tmux"
+          ln -s "${config.home.homeDirectory}/documents/tmux" \
+                "${config.home.homeDirectory}/.tmux"
+        fi
+      '';
+
       programs.tmux = {
         enable = true;
         clock24 = true;

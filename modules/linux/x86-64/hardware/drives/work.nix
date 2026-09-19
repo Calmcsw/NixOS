@@ -8,6 +8,7 @@
       "async" # Run all operations async
       "nofail" # Don't error if not plugged in
       "x-gvfs-show" # Show in file explorer
+      "x-systemd.automount" # Remount automatically on access after suspend
       "x-systemd.mount-timeout=5" # Timout for error
       "X-mount.mkdir" # Make dir if it doesn't exist
     ];

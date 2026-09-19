@@ -9,8 +9,8 @@
             ignore_dbus_inhibit = false;
             lock_cmd = "pidof hyprlock || hyprlock";
             unlock_cmd = "pkill --signal SIGUSR1 hyprlock";
-            before_sleep_cmd = "loginctl lock-session";
-            after_sleep_cmd = "hyprctl dispatch dpms on";
+            before_sleep_cmd = "loginctl lock-session; sleep 1";
+            after_sleep_cmd = "bash -c 'sleep 1; hyprctl dispatch dpms on'";
           };
           listener = [
             {

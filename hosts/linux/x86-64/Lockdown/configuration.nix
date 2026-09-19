@@ -66,6 +66,7 @@ in
     ../../../../modules/linux/x86-64/programs/misc/system-utils
     ../../../../modules/linux/x86-64/programs/misc/libreoffice
     ../../../../modules/linux/x86-64/programs/misc/lact # GPU fan, clock and power configuration
+    ../../../../modules/linux/x86-64/programs/misc/vivado
   ]
   ++ lib.optional (vars.games == true) ../../../../modules/linux/x86-64/core/games.nix;
 

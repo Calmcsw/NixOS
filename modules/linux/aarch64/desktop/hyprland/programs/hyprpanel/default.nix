@@ -17,11 +17,23 @@ in
     wf-recorder
   ];
   home-manager.sharedModules = [
-    (_: {
+    ({ lib, ... }: {
+      home.activation.hyprpanelMutableConfig = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+        config="$HOME/.config/hyprpanel/config.json"
+        if [ -L "$config" ]; then
+          tmp=$(mktemp)
+          cp "$(${pkgs.coreutils}/bin/readlink -f "$config")" "$tmp"
+          unlink "$config"
+          mv "$tmp" "$config"
+          chmod 644 "$config"
+        fi
+      '';
+
       programs.hyprpanel = {
         enable = true;
         systemd.enable = false;
         settings = {
+          wallpaper.enable = false;
           tear = true;
           notifications = {
             timeout = 3500;

@@ -17,5 +17,6 @@
     inputs.nix-software-center.packages.${pkgs.stdenv.hostPlatform.system}.nix-software-center
     nordpass
     claude-code
+    teams-for-linux
   ];
 }

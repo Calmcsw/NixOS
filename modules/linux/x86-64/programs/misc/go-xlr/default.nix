@@ -3,6 +3,7 @@
   environment.systemPackages = with pkgs; [
     goxlr-utility
     goxlr-utility-ui
+    zenity
   ];
 
   services.udev.packages = [ pkgs.goxlr-utility ];
@@ -33,7 +34,8 @@
         };
         Service = {
           Type = "oneshot";
-          ExecStart = "${pkgs.bash}/bin/sh -c 'sleep 3 && ${pkgs.goxlr-utility}/bin/goxlr-client profiles device load \"Default Green\"'";
+          # Wait for daemon to be ready, then load profile if it exists
+          ExecStart = "${pkgs.bash}/bin/bash -c 'sleep 3 && if ${pkgs.goxlr-utility}/bin/goxlr-client profiles list 2>/dev/null | grep -q \"Default Green\"; then ${pkgs.goxlr-utility}/bin/goxlr-client profiles device load \"Default Green\"; fi'";
           RemainAfterExit = "yes";
           TimeoutStartSec = 15;
         };
@@ -46,12 +48,13 @@
         Unit = {
           Description = "GoXLR Utility UI";
           After = [ "graphical-session.target" "goxlr-daemon.service" ];
+          Requires = [ "goxlr-daemon.service" ];
           PartOf = [ "graphical-session.target" ];
         };
         Service = {
           ExecStart = "${pkgs.goxlr-utility-ui}/bin/goxlr-utility-ui";
           Restart = "on-failure";
-          RestartSec = 3;
+          RestartSec = 5;
         };
         Install = {
           WantedBy = [ "graphical-session.target" ];

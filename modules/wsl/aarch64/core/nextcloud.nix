@@ -8,7 +8,22 @@ in
   # Install Nextcloud client
   environment.systemPackages = [ pkgs.nextcloud-client ];
 
-  home-manager.users.${username} = { config, ... }: {
+  home-manager.users.${username} = { config, lib, ... }: {
+    systemd.user.services.nextcloud-client = {
+      Unit = {
+        Description = "Nextcloud desktop client";
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.nextcloud-client}/bin/nextcloud --background";
+        Restart = "on-failure";
+        RestartSec = 3;
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
     # Set XDG directories to Nextcloud
     xdg.userDirs = {
       enable = true;

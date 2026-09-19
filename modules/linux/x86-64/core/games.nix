@@ -45,7 +45,7 @@
     };
     gamescope = {
       enable = true;
-      capSysNice = true;
+      capSysNice = false;
       package = pkgs.gamescope;
       args = [
         "--rt"
@@ -58,6 +58,15 @@
   };
   home-manager.sharedModules = [
     (_: {
+      xdg.desktopEntries.steam = {
+        name = "Steam";
+        exec = "steam -pipewire %U";
+        icon = "steam";
+        terminal = false;
+        categories = [ "Network" "FileTransfer" "Game" ];
+        mimeType = [ "x-scheme-handler/steam" "x-scheme-handler/steamlink" ];
+      };
+
       programs.mangohud = {
         enable = true;
         enableSessionWide = true;
@@ -69,8 +78,8 @@
         settings = {
           no_display = true; # Hide hud by default (Show by holding right-shift then press F12)
           fps_limit = [
-            60
             0
+            60
             144
             165
             240
@@ -107,7 +116,7 @@
           cpu_mhz = true;
 
           # GPU
-          throttling_status = true;
+          throttling_status = false;
           gpu_stats = true;
           gpu_temp = true;
           gpu_core_clock = true;

@@ -56,5 +56,6 @@ in
     ./programs/misc/gpu-screen-recorder
     ./programs/misc/power-profiles
     ./programs/misc/transcode
-  ];
+  ]
+  ++ lib.optional (vars.games == true) ./core/games.nix;
 }

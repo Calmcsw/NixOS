@@ -2,6 +2,7 @@
   host,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -68,6 +69,7 @@ let
   toggle-idle = pkgs.callPackage ./scripts/toggle-idle.nix { };
   toggle-nightlight = pkgs.callPackage ./scripts/toggle-nightlight.nix { };
   cycle-monitor-scale = pkgs.callPackage ./scripts/cycle-monitor-scale.nix { };
+  toggle-monitor = pkgs.callPackage ./scripts/toggle-monitor.nix { };
   window-pop = pkgs.callPackage ./scripts/window-pop.nix { };
   webcam-overlay = pkgs.callPackage ./scripts/webcam-overlay.nix { };
   toggle-gaps = pkgs.writeShellScriptBin "toggle-gaps" ''
@@ -119,6 +121,7 @@ in
     toggle-idle
     toggle-nightlight
     cycle-monitor-scale
+    toggle-monitor
     window-pop
     webcam-overlay
   ];
@@ -140,7 +143,10 @@ in
 
   programs.hyprland = {
     enable = true;
-    package = pkgs.hyprland;
+    # package = pkgs.hyprland; # nixpkgs version (wayland-protocols 1.48, incompatible with 0.56+)
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    # portalPackage = pkgs.xdg-desktop-portal-hyprland; # nixpkgs version (no InputCapture portal)
+    portalPackage = inputs.xdg-desktop-portal-hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     # withUWSM = true;
   };
 
@@ -150,9 +156,7 @@ in
       {
         xdg.portal = {
           enable = true;
-          extraPortals = with pkgs; [
-            xdg-desktop-portal-gtk
-          ];
+          extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
           xdgOpenUsePortal = true;
           configPackages = [ config.wayland.windowManager.hyprland.package ];
           config.hyprland = {
@@ -164,6 +168,7 @@ in
             "org.freedesktop.impl.portal.FileChooser" = "gtk";
             "org.freedesktop.impl.portal.Print" = "gtk";
           };
+          config.common.default = "*";
         };
 
         xdg.configFile."hypr/icons" = {
@@ -177,7 +182,8 @@ in
         #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
         wayland.windowManager.hyprland = {
           enable = true;
-          package = pkgs.hyprland;
+          # package = pkgs.hyprland; # nixpkgs version (wayland-protocols 1.48, incompatible with 0.56+)
+          package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
           plugins = [
             # inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprwinwrap
             # inputs.hyprsysteminfo.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -426,6 +432,7 @@ in
                 # Night Mode / Idle / Monitor / Misc toggles
                 (mk "SUPER + CTRL + N" (dsp.exec "${getExe toggle-nightlight}"))
                 (mk "SUPER + CTRL + I" (dsp.exec "${getExe toggle-idle}"))
+                (mk "SUPER + CTRL + M" (dsp.exec "${getExe toggle-monitor}"))
                 (mk "SUPER + slash" (dsp.exec "${getExe cycle-monitor-scale}"))
                 (mk "SUPER + ALT + slash" (dsp.exec "${getExe cycle-monitor-scale} --reverse"))
                 (mk "SUPER + CTRL + SHIFT + P" (dsp.exec "${getExe webcam-overlay}"))

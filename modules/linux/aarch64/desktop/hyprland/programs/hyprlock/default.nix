@@ -10,6 +10,9 @@ in
         settings = {
           general = {
             hide_cursor = true;
+            no_fade_in = true;
+            no_fade_out = true;
+            grace = 2;
           };
 
           background = [
@@ -20,7 +23,7 @@ in
 
               new_optimizations = true;
               blur_size = 3;
-              blur_passes = 2;
+              blur_passes = 1;
               noise = 0.0117;
               contrast = 1.000;
               brightness = 1.0000;

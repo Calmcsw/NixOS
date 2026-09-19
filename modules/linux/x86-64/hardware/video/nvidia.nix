@@ -9,15 +9,14 @@ let
 in
 {
   environment.sessionVariables = lib.optionalAttrs config.programs.hyprland.enable {
-    GBM_BACKEND = "nvidia-drm";
-    WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     # MOZ_DISABLE_RDD_SANDBOX = 1; # Potential security risk
 
     __GL_GSYNC_ALLOWED = "1"; # GSync
     __GL_VRR_ALLOWED = "1"; # VRR
-    __GL_MaxFramesAllowed = "1"; # Reduces input lag
+    __GL_MaxFramesAllowed = "1";
+    ENABLE_GAMESCOPE_WSI = "1";
   };
 
   # Load nvidia driver for Xorg and Wayland
@@ -25,8 +24,7 @@ in
   boot.kernelParams = lib.optionals (lib.elem "nvidia" config.services.xserver.videoDrivers) [
     "nvidia-drm.modeset=1"
     "nvidia_drm.fbdev=1"
-
-    "nvidia.NVreg_RegistryDwords=RmEnableAggressiveVblank=1" # Experimental: reduce latency
+    "nvidia.NVreg_RegistryDwords=RmEnableAggressiveVblank=1"
   ];
   hardware = {
     nvidia = {

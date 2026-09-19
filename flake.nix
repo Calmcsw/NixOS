@@ -36,7 +36,9 @@
     };
     hyprland = {
         url = "github:hyprwm/Hyprland";
-        inputs.nixpkgs.follows = "nixpkgs";
+    };
+    xdg-desktop-portal-hyprland = {
+        url = "github:hyprwm/xdg-desktop-portal-hyprland";
     };
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
