@@ -8,6 +8,11 @@
       # List the Flatpak applications you want to install
       # Use the official Flatpak application ID (e.g., from flathub.org)
       # Examples:
+      remotes = [{
+        name = "flathub";
+        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      }];
+
       packages = [
         "com.github.tchx84.Flatseal"     # Manage flatpak permissions - should always have this
         "io.github.flattool.Warehouse"   # Manage flatpaks, clean data, remove flatpaks and deps
