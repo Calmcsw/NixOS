@@ -5,7 +5,8 @@
     github-desktop
     # pokego # Overlayed
     prismlauncher
-    whatsapp-electron
+    karere
+    calibre
     deskflow
     brave
     easyeffects

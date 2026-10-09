@@ -10,9 +10,9 @@ let
     #   CLASSES[i]  — Hyprland window class
     #   WS[i]       — target workspace number
     #   FULL[i]     — open fullscreen (true/false)
-    CLASSES=( "com.mitchellh.ghostty" "zen-beta" "org.signal.Signal"       "io.github.tobagin.karere"      "thunderbird" "discord"      "brave-browser" "code"    "obsidian" )
-    WS=(       1                       2          3                         3             4             5              6               8         9          )
-    FULL=(     true                    true       false                     false         true          true           true            true      true       )
+    CLASSES=( "com.mitchellh.ghostty" "zen-beta" "org.signal.Signal"       "io.github.tobagin.karere"      "thunderbird" "discord"      "brave-browser" "dev.deedles.Trayscale"      "ivpn" "code"    "obsidian" )
+    WS=(       1                       2          3                         3                               4             5              6               7                            7      8         9          )
+    FULL=(     true                    true       false                     false                           true          true           true            false                        false  true      true       )
 
     # Launch commands per class — declared after variable resolution above
     declare -A CMD
@@ -23,6 +23,8 @@ let
     CMD["thunderbird"]="thunderbird"
     CMD["discord"]="$discord_bin"
     CMD["brave-browser"]="brave"
+    CMD["ivpn"]="ivpn-ui"
+    CMD["dev.deedles.Trayscale"]="trayscale"
     CMD["code"]="$code_bin --disable-gpu"
     CMD["obsidian"]="obsidian"
 

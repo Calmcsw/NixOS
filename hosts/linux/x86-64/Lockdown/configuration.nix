@@ -27,7 +27,7 @@ in
     ../../../../modules/linux/x86-64/core/system.nix
     ../../../../modules/linux/x86-64/core/users.nix
     ../../../../modules/linux/x86-64/core/nextcloud.nix
-    # ../../../../modules/linux/x86-64/core/flatpak.nix
+    ../../../../modules/linux/x86-64/core/flatpak.nix
     # ../../../../modules/linux/x86-64/core/virtualisation.nix
     # ../../../../modules/linux/x86-64/core/dlna.nix
 
@@ -67,6 +67,8 @@ in
     ../../../../modules/linux/x86-64/programs/misc/libreoffice
     ../../../../modules/linux/x86-64/programs/misc/lact # GPU fan, clock and power configuration
     ../../../../modules/linux/x86-64/programs/misc/vivado
+    ../../../../modules/linux/x86-64/programs/misc/ivpn
+    ../../../../modules/linux/x86-64/programs/misc/tailscale
   ]
   ++ lib.optional (vars.games == true) ../../../../modules/linux/x86-64/core/games.nix;
 

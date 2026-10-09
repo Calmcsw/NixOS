@@ -20,7 +20,7 @@
           # }
           {
             label = "logout";
-            action = "loginctl terminate-session $XDG_SESSION_ID";
+            action = "hyprctl dispatch exit 0";
             # action = "killall -9 Hyprland sleep 2";
             text = "Exit";
             keybind = "e";

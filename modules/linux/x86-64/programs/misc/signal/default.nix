@@ -1,6 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
-    environment.systemPackages = with pkgs; [
-        signal-desktop
-    ];
+  services.flatpak.packages = [ "org.signal.Signal" ];
 }
